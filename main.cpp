@@ -4,13 +4,16 @@
 
 int main()
 {
-    CStudent* p = new CStudent;
-    CStudent* head = NULL;
-    int size = 0;
-    bool exit = true;
+    //створення пустого списку
+    SStudent* p = new SStudent;
+    SStudent* head = NULL;
+    int size = 0;//кількість елементів списку
+    bool exit = true;//умова виходу з консольного меню програми
+    //вміст меню програми
     std::string menu = "Choose variant:\n1.Read data from file\n2.Read data from console\n3.Record data to file\n4.Sort List\n5.Display List and youngest and oldest student\n"
                        "6.Diplay the list of students who did not receive a single grade 5 in the exams\n"
                        "7.Delete Students, who have 3 on First and Third exams\n8.Add new student in position\n9.Delete student from position\n0.Exit\n";
+    //реалізація меню програми
     do
     {
         std::cout<<menu;
