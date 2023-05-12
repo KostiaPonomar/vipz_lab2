@@ -7,7 +7,7 @@
 #include <regex>
 
 //--------------------------------------------------------------------------------
-void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
+void ReadFromConsole(SStudent *&p, SStudent *&head, int &size) {
     bool condition = true;
     while(condition)
     {
@@ -17,7 +17,7 @@ void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
             break_conditioon = true;
             std::cout<<"Enter Surname\n";
             std::cin>> temp;
-            if(temp.length()>51)
+            if(temp.length()>50)
             {
                 std::cout<<"Too many characters, enter up to 50. Try again\n";
             }
@@ -26,12 +26,12 @@ void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
                 temp.clear();
                 break_conditioon = false;
             }
-        } while (break_conditioon);
+        } while (break_conditioon);//цикл для задання прізвища, поки користувач не введе прізвище коротше за 50 символів
         do {
             break_conditioon = true;
             std::cout<<"Enter Name\n";
             std::cin>> temp;
-            if(temp.length()>51)
+            if(temp.length()>50)
             {
                 std::cout<<"Too many characters, enter up to 50. Try again\n";
             }
@@ -40,7 +40,7 @@ void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
                 temp.clear();
                 break_conditioon = false;
             }
-        } while (break_conditioon);
+        } while (break_conditioon);//цикл для задання імені, поки користувач не введе ім'я коротше за 50 символів
         do {
             break_conditioon = true;
             std::cout<<"Enter date of birth in format xx.xx.xxxx\n";
@@ -68,7 +68,7 @@ void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
             } else {
                 std::cout << "Eror: date " << p->m_cdob << " enter doesn't correctly\n";
             }
-        } while (break_conditioon);
+        } while (break_conditioon);//цикл для задання дати, поки користувач не введе коректний формат дати
         std::cout<<"Enter marks\n";
         for(int i = 0;i<6;i++)
         {
@@ -86,14 +86,14 @@ void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
                 }
                 else
                     std::cout<<"Not correct mark";
-            }while(condition_b);
-        }
-        p->m_davg/=6;
-        if(!head)
+            }while(condition_b);//цикл для задання оцінки, поки користувач не введе оцінку в діапазоні від 1 до 5
+        }//цикл для створення масиву оцінок
+        p->m_davg/=6;//знаходження середнього арифметичного
+        if(!head)//якщо список пустий то перший елемент іменуймо головою
             head = p;
-        CStudent* pp = new CStudent;
+        SStudent* pp = new SStudent;
         p->pnext = pp;
-        p = pp;
+        p = pp;//створення та задання нового елементу списку
         size++;
         std::cout<<"Add one more student?\n1.Yes\n2.No\n";
         int choice;
@@ -113,11 +113,11 @@ void ReadFromConsole(CStudent *&p, CStudent *&head, int &size) {
                 default:
                     std::cout<<"Wrong choice\n";
             }
-        }
+        }//цикл для того щоб знати чи хоче користувач додати ще одного студента до списку
     }
 }
 //--------------------------------------------------------------------------------
-void ReadFromFile(CStudent *&p, CStudent *&head, int &size) {
+void ReadFromFile(SStudent *&p, SStudent *&head, int &size) {
     std::ifstream fin;
     fin.open("/Users/kostaponomar/CLionProjects/untitled1/students");
     if(!fin.is_open())
@@ -145,7 +145,7 @@ void ReadFromFile(CStudent *&p, CStudent *&head, int &size) {
             p->m_davg/=6;
             if(!head)
                 head = p;
-            CStudent* pp = new CStudent;
+            SStudent* pp = new SStudent;
             p->pnext = pp;
             p = pp;
             size++;
@@ -155,7 +155,7 @@ void ReadFromFile(CStudent *&p, CStudent *&head, int &size) {
     }
 }
 //--------------------------------------------------------------------------------
-void Display(CStudent *p, CStudent *head) {
+void Display(SStudent *p, SStudent *head) {
     p=head;
     while(p->pnext != NULL)
     {
@@ -176,7 +176,7 @@ void Display(CStudent *p, CStudent *head) {
 
 }
 //--------------------------------------------------------------------------------
-void RecordingToFile(CStudent *&p, CStudent *&head) {
+void RecordingToFile(SStudent *&p, SStudent *&head) {
     char file_name[50];
     std::cout<<"Enter file name:";
     std::cin>>file_name;
@@ -186,32 +186,33 @@ void RecordingToFile(CStudent *&p, CStudent *&head) {
     if(!fout.is_open())
     {
         std::cout<<"WRONG\n";
+        return;
     }
     while(p->pnext != NULL)
     {
         fout << p->m_cSecondName << "|" << p->m_cName << "|" << p->m_cdob << "|"
             <<p->mark[0]<<","<<p->mark[1]<<","<<p->mark[2]<<","<<p->mark[3]<<","<<p->mark[4]<<","<<p->mark[5]<<"|\n";
         p = p->pnext;
-    }
+    }//цикл для запису даних елементів списку у файл
     fout.close();
     std::cout<<"Data recorded to file succesful\n";
 }
 //--------------------------------------------------------------------------------
-CStudent* Swap(CStudent* ptr1, CStudent* ptr2) {
-    CStudent* tmp = ptr2->pnext;
+SStudent* Swap(SStudent* ptr1, SStudent* ptr2) {//допоміжна функція для переставки елементів для сортування
+    SStudent* tmp = ptr2->pnext;
     ptr2->pnext = ptr1;
     ptr1->pnext = tmp;
     return ptr2;
 }
 //--------------------------------------------------------------------------------
-void SortList(CStudent **head, int size) {
-    CStudent** h;
+void SortList(SStudent **head, int size) {
+    SStudent** h;
     int i, j, swapped;
     for (i = 0; i <= size; i++) {
         h = head; swapped = 0;
         for (j = 0; j < size - i - 1; j++) {
-            CStudent* p1 = *h;
-            CStudent* p2 = p1->pnext;
+            SStudent* p1 = *h;
+            SStudent* p2 = p1->pnext;
             if (p1->m_davg < p2->m_davg)
             {
                 *h = Swap(p1, p2);
@@ -224,7 +225,7 @@ void SortList(CStudent **head, int size) {
     }
 }
 //--------------------------------------------------------------------------------
-void DisplayAllExcept5(CStudent *p, CStudent *head) {
+void DisplayAllExcept5(SStudent *p, SStudent *head) {
     p=head;
     while(p->pnext != NULL)
     {
@@ -247,23 +248,23 @@ void DisplayAllExcept5(CStudent *p, CStudent *head) {
     printf("**********************************\n");
 }
 //--------------------------------------------------------------------------------
-CStudent* SearchAndDel(CStudent *head, int* size) {
+SStudent* SearchAndDel(SStudent *head, int* size) {
     if (head == NULL) {
         return NULL;
     }
     if (head->mark[0] == 3&&head->mark[2]==3)
     {
-        CStudent* temp = head;
+        SStudent* temp = head;
         head = head->pnext;
         delete temp;
         size--;
         return head;
     }
-    CStudent* current = head;
+    SStudent* current = head;
     while (current->pnext != NULL) {
         if (current->pnext->mark[0] == 3 && current->pnext->mark[2] == 3)
         {
-            CStudent* temp = current->pnext;
+            SStudent* temp = current->pnext;
             current->pnext = current->pnext->pnext;
             delete temp;
             size--;
@@ -274,9 +275,9 @@ CStudent* SearchAndDel(CStudent *head, int* size) {
     return NULL;
 }
 //--------------------------------------------------------------------------------
-void OldestStudent(CStudent **head) {
-    CStudent*p = (*head);
-    CStudent*Old;
+void OldestStudent(SStudent **head) {
+    SStudent*p = (*head);
+    SStudent*Old;
     std::vector<std::string> dates;
     while(p->pnext != NULL)
     {
@@ -310,9 +311,9 @@ void OldestStudent(CStudent **head) {
     printf("**********************************\n");
 }
 //--------------------------------------------------------------------------------
-void YoungestStudent(CStudent **head) {
-    CStudent*p = (*head);
-    CStudent*Young;
+void YoungestStudent(SStudent **head) {
+    SStudent*p = (*head);
+    SStudent*Young;
     std::vector<std::string> dates;
     while(p->pnext != NULL)
     {
@@ -348,8 +349,8 @@ void YoungestStudent(CStudent **head) {
 }
 //--------------------------------------------------------------------------------
 void InsertNewStudent(
-        CStudent* p,
-        CStudent** head,
+        SStudent* p,
+        SStudent** head,
         int& size) {
     std::cout << "Enter position: ";
     int pos;
@@ -357,7 +358,7 @@ void InsertNewStudent(
     p = (*head);
     if(pos==1)
     {
-        CStudent* new_node = new CStudent;
+        SStudent* new_node = new SStudent;
         std::cout<<"Enter surname: ";
         std::cin>>new_node->m_cSecondName;
         std::cout<<"Enter name: ";
@@ -384,7 +385,7 @@ void InsertNewStudent(
             for (int i = 0; i < pos-2; i++) {
                 p = p->pnext;
             }
-            CStudent *new_node = new CStudent;
+            SStudent *new_node = new SStudent;
             std::cout<<"Enter surname: ";
             std::cin>>new_node->m_cSecondName;
             std::cout<<"Enter name: ";
@@ -404,8 +405,8 @@ void InsertNewStudent(
     }
     else if(pos>size)
     {
-        CStudent* new_node = new CStudent;
-        CStudent* currNode = (*head);
+        SStudent* new_node = new SStudent;
+        SStudent* currNode = (*head);
         std::cout<<"Enter surname: ";
         std::cin>>new_node->m_cSecondName;
         std::cout<<"Enter name: ";
@@ -430,14 +431,14 @@ void InsertNewStudent(
             currNode = currNode->pnext;
         }
         currNode->pnext = new_node;
-        CStudent* pp = new CStudent;
+        SStudent* pp = new SStudent;
         pp->pnext=NULL;
         currNode->pnext->pnext=pp;
     }
     size++;
 }
 //--------------------------------------------------------------------------------
-void DeleteFromPosition(CStudent **head, int& size) {
+void DeleteFromPosition(SStudent **head, int& size) {
     std::cout << "Enter position: ";
     int pos;
     std::cin >> pos;
@@ -447,7 +448,7 @@ void DeleteFromPosition(CStudent **head, int& size) {
         std::cout<<"Out the size of list\n";
         return;
     }
-    CStudent* temp = *head;
+    SStudent* temp = *head;
     if (pos == 1) {
         *head = temp->pnext;
         delete temp;
@@ -458,7 +459,7 @@ void DeleteFromPosition(CStudent **head, int& size) {
         temp = temp->pnext;
     if (temp == NULL || temp->pnext == NULL)
         return;
-    CStudent* next = temp->pnext->pnext;
+    SStudent* next = temp->pnext->pnext;
     delete temp->pnext;
     size--;
     temp->pnext = next;
